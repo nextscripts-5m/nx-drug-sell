@@ -10,7 +10,14 @@
 5. Restart the server
 
 # Dependency
-Watch the `fxmanifest.lua`
+Watch the `fxmanifest.lua`, you will need:
+```lua
+  
+  server_scripts {
+    '@oxmysql/lib/MySQL.lua'
+  }
+  
+```
 
 # Video
 Not provided anymore
