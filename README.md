@@ -11,8 +11,10 @@
 
 # Dependency
 Watch the `fxmanifest.lua`, you will need:
+
 ```lua
-  
+  shared_script '@es_extended/imports.lua'
+
   server_scripts {
     '@oxmysql/lib/MySQL.lua'
   }
