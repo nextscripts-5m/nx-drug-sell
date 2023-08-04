@@ -10,20 +10,10 @@
 5. Restart the server
 
 # Dependency
-Watch the `fxmanifest.lua`, you will need:
-
-```lua
-  shared_script '@es_extended/imports.lua'
-
-  server_scripts {
-    '@oxmysql/lib/MySQL.lua'
-  }
-
-```
-
-## Others dependencies
-- ox_inventory
-- ox_target
+- [es_extended](https://github.com/esx-framework/esx-legacy/tree/main/%5Besx%5D/es_extended)
+- [ox_inventory](https://github.com/overextended/ox_inventory)
+- [ox_target](https://github.com/overextended/ox_target)
+- [ox_mysql](https://github.com/overextended/oxmysql)
 
 # Video
 [Youtube](https://youtu.be/hc5h93AZcXU)
