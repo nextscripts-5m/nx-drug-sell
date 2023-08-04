@@ -18,8 +18,12 @@ Watch the `fxmanifest.lua`, you will need:
   server_scripts {
     '@oxmysql/lib/MySQL.lua'
   }
-  
+
 ```
+
+## Others dependencies
+- ox_inventory
+- ox_target
 
 # Video
 Not provided anymore
