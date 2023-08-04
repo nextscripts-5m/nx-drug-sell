@@ -30,7 +30,6 @@ If you need help you can ask for help. A premise, this is my first script after 
 - [ox_inventory](https://github.com/overextended/ox_inventory)
 - [ox_target](https://github.com/overextended/ox_target)
 - [ox_mysql](https://github.com/overextended/oxmysql)
-- [ox_lib](https://github.com/overextended/ox_lib)
 
 # 🎬 Video
 [Youtube](https://youtu.be/hc5h93AZcXU)
