@@ -1,6 +1,10 @@
 # [ESX] NPC Drug Sell
 
-<div align='center'><img src='![showcase](https://github.com/docc5m/nx-drug-sell/assets/141370381/7418f457-9e48-4e0c-b2c1-338682b28632)'/></div>
+A script that allows you to sell drugs to NPC's. It was thought as a business for gangs or as a red zone where gangs can fight with each other.
+
+If you need help you can ask for help. A premise, this is my first script after 3 weeks of experience, so don't blame me :D .
+
+🚀 Easily configurable with config.lua
 
 # 🔗 Installation
 1. Download the repository
