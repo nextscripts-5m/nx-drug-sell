@@ -26,4 +26,4 @@ Watch the `fxmanifest.lua`, you will need:
 - ox_target
 
 # Video
-Not provided anymore
+[Youtube](https://youtu.be/hc5h93AZcXU)
