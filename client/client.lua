@@ -410,7 +410,7 @@ local configureBlips = function(Zones)
             SetBlipAsShortRange(blip, true)
 
             BeginTextCommandSetBlipName("STRING")
-            AddTextComponentString(j .. ' - Zona di spaccio')
+            AddTextComponentString(j .. _Config.Lang['zone'])
             EndTextCommandSetBlipName(blip)
 
         end

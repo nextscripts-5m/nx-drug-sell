@@ -14,7 +14,6 @@ Config.MaxQuantity = 15
 -- Drugs item name, you can change it in ox_inventory/data/items.lua
 Config.Drugs = {
     'marijuana',
-    'burger'
 }
 
 -- Command Name
@@ -50,7 +49,8 @@ Config.Lang = {
     ['w8_seconds'] = 'You have to wait a few more seconds to repeat the command',
     ['reached_limit'] = 'There are too many people who are dealing!',
     ['help_command'] = 'The dealing begins',
-    ['not_allowed'] = 'You are not authorized to deal!'
+    ['not_allowed'] = 'You are not authorized to deal!',
+    ['zone'] = ' - Sell Zone'
 }
 
 -- Zones
