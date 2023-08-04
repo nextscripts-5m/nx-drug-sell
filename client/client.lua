@@ -351,15 +351,22 @@ end
 ---@param zone any the sell zone name
 function checkDistance(zone)
 
-    lib.zones.sphere({
-        coords = _Config.Zone[zone].posizione,
-        radius = _Config.Zone[zone].raggio,
-        onExit = function ()
-            canSell = false
-            ESX.ShowNotification(_Config.Lang['terminated'])
-            endSession()
+    Citizen.CreateThread(function() 
+        while canSell do
+
+            Wait(2000)
+            local playerPed = PlayerPedId()
+            local playerCoords = GetEntityCoords(playerPed)
+            local distance = #(playerCoords - _Config.Zone[zone].posizione)
+            -- controlliamo se siamo fuori dal raggio
+            if(distance > _Config.Zone[zone].raggio) then
+                canSell = false
+                ESX.ShowNotification(_Config.Lang['terminated'])
+            end
         end
-    })
+
+        endSession()
+    end)
 end
 
 
