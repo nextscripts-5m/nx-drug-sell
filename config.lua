@@ -18,14 +18,14 @@ Config.Drugs = {
 }
 
 -- Command Name
-Config.commandName = 'spaccio'
+Config.commandName = 'sell'
 
 -- Name of the black money that you receive, you can change it in ox_inventory/data/items.lua
 Config.blackMoney = 'black_money'
 
 -- Ox Options
 Config.ox_options = {
-    label = 'Vendi',
+    label = 'Sell',
     name = 'vendita',
     icon = 'fa-solid fa-eye',
     distance = 1.6,
@@ -34,23 +34,23 @@ Config.ox_options = {
 
 --- ['job_name'] = 'sentence'
 Config.notAllowedJob = {
-    ['police'] = 'Sei un poliziotto, non sei autorizzato a spacciare!',
-    ['ambulance'] = 'Sei un medico, non sei autorizzato a spacciare!',
+    ['police'] = 'You\'re a cop, you\'re not allowed to deal!',
+    ['ambulance'] = 'You are a doctor, you are not authorized to deal!',
 
 }
 --- Language configuration
 Config.Lang = {
-    ['start'] = 'Stai iniziando lo spaccio',
-    ['denied'] = 'Non puoi spacciare in questa zona!',
-    ['run_away'] = 'Allontanati o ti scopriranno!',
-    ['no_drugs'] = 'Non hai più droga da vendere!',
-    ['terminated'] = 'Sei uscito dalla zona!',
-    ['w8_minutes'] = 'Devi aspettare % minuti per ripetere il comando',
-    ['w8_minute']  = 'Devi aspettare % minuto per ripetere il comando',
-    ['w8_seconds'] = 'Devi aspettare ancora qualche secondo per ripetere il comando',
-    ['reached_limit'] = 'Ci sono troppe persone che stanno spacciando!',
-    ['help_command'] = 'Inizia lo spaccio',
-    ['not_allowed'] = 'Non sei autorizzato a spacciare!'
+    ['start'] = 'You\'re starting the deal',
+    ['denied'] = 'You can\'t deal in this area!',
+    ['run_away'] = 'Walk away or they\'ll find you!',
+    ['no_drugs'] = 'You have no more drugs to sell!',
+    ['terminated'] = 'You are out of the zone!',
+    ['w8_minutes'] = 'You have to wait % minutes to repeat the command',
+    ['w8_minute']  = 'You have to wait % minute to repeat the command',
+    ['w8_seconds'] = 'You have to wait a few more seconds to repeat the command',
+    ['reached_limit'] = 'There are too many people who are dealing!',
+    ['help_command'] = 'The dealing begins',
+    ['not_allowed'] = 'You are not authorized to deal!'
 }
 
 -- Zones
