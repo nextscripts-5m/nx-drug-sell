@@ -25,7 +25,7 @@ If you need help you can ask for help. A premise, this is my first script after 
   * Change NPCS Model
   * Make more points for NPCS
   * Limit the players who are selling in the zone
-  * Timer between one command and another
+  * Timer between one command and another 
 
 # 💥 Dependency
 - [es_extended](https://github.com/esx-framework/esx-legacy/tree/main/%5Besx%5D/es_extended)
