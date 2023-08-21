@@ -48,7 +48,7 @@ RegisterNetEvent('doc:checkZona', function()
                 -- possiamo ripetere il comando
 
                 Config.Zone[j].limitPlayer = Config.Zone[j].limitPlayer + 1
-                print(Config.Zone[j].limitPlayer)
+                print('Limit: ' .. Config.Zone[j].limitPlayer)
                 
                 
                 if(Config.Zone[j].limitPlayer > Config.PlayerLimit) then
@@ -94,7 +94,6 @@ function setNextCommandTime(player)
         nextCommand,
         player.getIdentifier(),
     })
-    --print('Il comando lo potrai rifare tra ' .. tostring(nextCommand) .. ' millisecondi' )
 end
 
 
@@ -102,16 +101,16 @@ RegisterNetEvent('doc:removeItem', function (item, count)
     
     local xPlayer = ESX.GetPlayerFromId(source)
     local dirtyItem = Config.blackMoney
+    local dirtyQuantity = Config.BlackMoneyQuantities[item]
     xPlayer.removeInventoryItem(item, count)
-
-    xPlayer.addInventoryItem(dirtyItem, Config.blackMoneyQuantity * count)
+    xPlayer.addInventoryItem(dirtyItem, dirtyQuantity * count)
 
 end)
 
 
 RegisterNetEvent('doc:updatePlayers', function (zona)
-    Config.Zone[zona].limitPlayer = Config.Zone[zona].limitPlayer - 1
-    print(Config.Zone[zona].limitPlayer)
+    Config.Zone[zona].limitPlayer = math.max(Config.Zone[zona].limitPlayer - 1, 0)
+    print('Limit ' .. Config.Zone[zona].limitPlayer)
 end)
 
 
