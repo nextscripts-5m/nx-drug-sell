@@ -1,10 +1,11 @@
 local canSell           = false
 local currentZone       = nil
-local _Config              = nil
+local _Config           = nil
 local hasSelled         = false
 local isSpawned         = false
 local canMove           = true
 local Peds              = {}
+local firstSpawn        = true
 
 ---Drug Zone setter
 ---@param sell boolean tells if we are in a correct zone
@@ -12,7 +13,7 @@ RegisterNetEvent('doc:setZone',  function(zone, sell)
 
     canSell = sell
 
-    -- se siamo in una zona corretta, iniziamo la vendita
+    -- if we are in a correct area, we start the sale
     if(canSell) then
 
         currentZone = zone
@@ -21,7 +22,7 @@ RegisterNetEvent('doc:setZone',  function(zone, sell)
 
     end
 
-    -- facciamo in modo che questa stampa compaia solo una volta e non per ogni zona
+    -- we ensure that this printout appears only once and not for every zone
     if zone == nil then
         ESX.ShowNotification(_Config.Lang['denied'])
     end
@@ -51,14 +52,14 @@ handlePedMovement = function(zone)
     local index = math.random(1, #Peds)
     local ped = Peds[index].ped
     
-    -- Se il ped può muoversi, viene verso di noi
+    -- If the ped can move, it comes towards us
     if canMove then
         canMove = false
         TaskGoToEntity(ped, PlayerPedId(), -1, 1.0, 1.49, 0, 0)
         SetPedKeepTask(ped, true)
     end
 
-    -- Finchè non ci arriva un ped vicino non ne facciamo partire un altro
+    -- Until a nearby ped arrives, we don't start another one
     Citizen.CreateThread(function ()
         while true do
             Wait(500)
@@ -73,7 +74,7 @@ handlePedMovement = function(zone)
         while true do
             Wait(1000)
             if hasSelled then
-                -- aspettiamo qualche secondo per far avvicinare il prossimo ped
+                -- we wait a few seconds to bring the next ped closer
                 Wait(1500)
                 hasSelled = false
 
@@ -104,15 +105,6 @@ local checkDrugs = function(zone)
             for k, v in ipairs(_Config.Drugs) do
                 
                 quantities = quantities + exports.ox_inventory:GetItemCount(v)
-
-                -- if v == _Config.Drugs[1] then
-                --     marijuanaQuantity = exports.ox_inventory:GetItemCount(v)
-                -- end
-
-                -- if v == _Config.Drugs[2] then
-                --     eroinaQuantity = exports.ox_inventory:GetItemCount(v)
-                -- end
-                
             end
 
             if (quantities == 0) then
@@ -159,6 +151,7 @@ function configuraSpaccio(zone)
 
     checkDistance(zone)
     spawnPeds(zone)
+    firstSpawn = false
     handlePedMovement(zone)
     checkDrugs(zone)
     --checkPeds()
@@ -182,7 +175,7 @@ spawnPeds = function(zone)
                 Citizen.Wait(1)
             end
 
-            -- controllo se il ped è uno tra quelli spawnati, così evito di spawnare lo stesso ped
+            -- I check if the ped is one of the spawned ones, so I avoid spawning the same ped
             for k, v in pairs(Peds) do
 
                 if ped.position[i] == v.position then
@@ -195,10 +188,10 @@ spawnPeds = function(zone)
 
                 local npcSpawn = CreatePed(4, haskKey, ped.position[i], 0.0, false, true)
 
-                -- controllo che un npc non mi spawni attaccato
+                -- I check that an npc doesn't spawn attached to me, except the first time
                 local _, distance = checkDistanceBetweenPeds(PlayerPedId(), npcSpawn, zone, 0)
 
-                if distance <= 5 then
+                if distance <= 5 and not firstSpawn then
                     canAddOptions = false
                 end
 
@@ -207,7 +200,7 @@ spawnPeds = function(zone)
 
                 table.insert(Peds, { ped = npcSpawn, position = ped.position[i], blip = blip})
 
-                SetEntityHeading(npcSpawn, ped.heading)
+                SetEntityHeading(npcSpawn, 0)
                 SetPedCombatAttributes(npcSpawn, 0, true)
                 SetPedCombatAttributes(npcSpawn, 5, true)
                 SetPedCombatAttributes(npcSpawn, 46, true)
@@ -280,7 +273,7 @@ RegisterNetEvent('doc:handleSelling', function (data)
 
         local items = exports.ox_inventory:GetItemCount(v)
 
-        -- se ho almeno 1 pezzo di una delle due sostanze, mi salvo la quantità di una delle due ed il nome della sostanza a cui mi riferisco
+        -- if I have at least 1 piece of one of the two substances, I save the quantity of one of the two and the name of the substance to which I refer
         if items > drugsQuantity then
             drugsQuantity = items
             drug = v
@@ -290,8 +283,8 @@ RegisterNetEvent('doc:handleSelling', function (data)
 
     if(drugsQuantity > 0) then
 
-        -- possiamo vendere al massimo _Config.MaxQuantity
-        local askedQuantity = math.random(1, math.min(_Config.MaxQuantity, exports.ox_inventory:GetItemCount(drug)))
+        -- we can sell the most _Config.MaxQuantity
+        local askedQuantity = math.random(1, math.min(_Config.MaxQuantities[drug], exports.ox_inventory:GetItemCount(drug)))
 
         TriggerServerEvent('doc:removeItem', drug, askedQuantity)
 
@@ -323,23 +316,21 @@ function removePed(index, canRemove)
   
 
     Wait(500)
-    -- l'npc va via dopo la vendita
+    -- the npc leaves after the sale
     TaskWanderStandard(pedToRemove, 10.0, 10)
     
-    -- dopo lo spaccio non possiamo continuare a vendere a quel NPC
+    -- after dealing we can't continue to sell to that NPC
     exports.ox_target:removeLocalEntity(pedToRemove, _Config.ox_options.name)
 
 end
 
 
 -- local minutes = 2 * MINUTE
--- ---Starts the timer. Quanti <minutes> deve durare la vendita?
+-- ---Starts the timer. How many <minutes> should the sale last?
 -- function startTimer()
---     --print('Puoi spacciare per ' .. ESX.Math.Round(minutes / MINUTE) .. ' minuti')
 --     minutes = minutes - 1000
---     -- se è scaduto il tempo, interrompiamo la vendita
+--     -- if the time is up, we stop the sale
 --     if(minutes <= 0) then
---         print('Scaduto il tempo')
 --         canSell = false
 --         endSession()
 --     end
@@ -358,14 +349,13 @@ function checkDistance(zone)
             local playerPed = PlayerPedId()
             local playerCoords = GetEntityCoords(playerPed)
             local distance = #(playerCoords - _Config.Zone[zone].posizione)
-            -- controlliamo se siamo fuori dal raggio
+            -- let's check if we're out of range
             if(distance > _Config.Zone[zone].raggio) then
                 canSell = false
+                endSession()
                 ESX.ShowNotification(_Config.Lang['terminated'])
             end
         end
-
-        endSession()
     end)
 end
 
