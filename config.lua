@@ -77,7 +77,7 @@ Config.Zone = {
                 position = {
                     vector3(214.2264, 2799.7104, 45.6552),
                     vector3(291.6712, 2806.4036, 43.4682),
-                },<
+                },
             },
             {
                 model = "csb_ramp_gang",
