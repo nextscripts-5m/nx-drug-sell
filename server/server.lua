@@ -100,8 +100,19 @@ end
 RegisterNetEvent('doc:removeItem', function (item, count)
     
     local xPlayer = ESX.GetPlayerFromId(source)
+
+    if not xPlayer then
+        return
+    end
+
     local dirtyItem = Config.blackMoney
     local dirtyQuantity = Config.BlackMoneyQuantities[item]
+
+    if not dirtyQuantity then
+        print(("[%s] Item '%s' not setup in config. Player '%s' may be a modder and triggered this event."):format(GetCurrentResourceName(), item, xPlayer.getIdentifier()))
+        return
+    end
+
     xPlayer.removeInventoryItem(item, count)
     xPlayer.addInventoryItem(dirtyItem, dirtyQuantity * count)
 
