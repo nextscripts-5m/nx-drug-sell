@@ -113,6 +113,12 @@ RegisterNetEvent('doc:removeItem', function (item, count)
         return
     end
 
+    local inventoryItem = xPlayer.getInventoryItem(item)
+    if(not inventoryItem or inventoryItem.count < count) then
+        xPlayer.showNotification("You don't own enough.")
+        return
+    end
+
     xPlayer.removeInventoryItem(item, count)
     xPlayer.addInventoryItem(dirtyItem, dirtyQuantity * count)
 
