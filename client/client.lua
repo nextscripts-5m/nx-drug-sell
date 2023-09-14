@@ -287,7 +287,7 @@ RegisterNetEvent('doc:handleSelling', function (data)
         local askedQuantity = math.random(1, math.min(_Config.MaxQuantities[drug], exports.ox_inventory:GetItemCount(drug)))
 
         TriggerServerEvent('doc:removeItem', drug, askedQuantity)
-
+        PedHandshake(data.entity)
         hasSelled = true
 
     else
@@ -300,6 +300,29 @@ RegisterNetEvent('doc:handleSelling', function (data)
 
     
 end)
+
+---Peds handshake
+---@param npcPed number ped entity
+PedHandshake = function (npcPed)
+    local dict = "mp_ped_interaction"
+    local flag = "handshake_guy_a"
+
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Wait(0)
+    end
+
+    TaskPlayAnim(PlayerPedId(), dict, flag, 8.0, 8.0 , -1, 0, 1, false, false, false )
+    TaskPlayAnim(npcPed, dict, flag, 8.0, 8.0 , -1, 0, 1, false, false, false )
+    CreateThread(function ()
+        while true do
+            Wait(2000)
+            if not IsEntityPlayingAnim(npcPed, dict, flag, 3) then
+                TaskWanderStandard(npcPed, 10.0, 10)
+            end
+        end
+    end)
+end
 
 ---Remove one ped from the sell
 ---@param index number the index of the ped in the Peds table
