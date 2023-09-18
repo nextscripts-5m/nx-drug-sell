@@ -307,6 +307,9 @@ PedHandshake = function (npcPed)
     local dict = "mp_ped_interaction"
     local flag = "handshake_guy_a"
 
+    TaskGoToEntity(npcPed, PlayerPedId(), -1, 0.0, 1.49, 0, 0)
+    Wait(1000)
+
     RequestAnimDict(dict)
     while not HasAnimDictLoaded(dict) do
         Wait(0)
