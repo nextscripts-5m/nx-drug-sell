@@ -14,9 +14,9 @@ end)
 
 --- Check if a player can sell drugs
 RegisterNetEvent('doc:checkZona', function()
-
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local plrPos = xPlayer.getCoords(true)
+    local source    = source
+    local xPlayer   = ESX.GetPlayerFromId(source)
+    local plrPos    = xPlayer.getCoords(true)
 
 
     for job, phrase in pairs(Config.notAllowedJob) do
@@ -36,12 +36,12 @@ RegisterNetEvent('doc:checkZona', function()
         local distance = #(plrPos - zona.posizione)
         if(distance <= zona.raggio) then
 
+            local response = MySQL.query.await("SELECT nextcm FROM users WHERE identifier = ?", {xPlayer.getIdentifier()})
 
-            MySQL.Async.fetchScalar('SELECT nextcm FROM users where identifier = ?', {xPlayer.getIdentifier()}, function (result)
-                
-                nextCommand = result or 0
-            end)
-            
+            if response then
+                nextCommand = response[1].nextcm or 0
+            end
+
             print('nextcm: ' .. nextCommand)
 
             if(GetGameTimer() > nextCommand) then
@@ -49,8 +49,7 @@ RegisterNetEvent('doc:checkZona', function()
 
                 Config.Zone[j].limitPlayer = Config.Zone[j].limitPlayer + 1
                 print('Limit: ' .. Config.Zone[j].limitPlayer)
-                
-                
+
                 if(Config.Zone[j].limitPlayer > Config.PlayerLimit) then
                     TriggerClientEvent('doc:reachedLimitPlayer', source)
                     findZone = true
@@ -65,9 +64,9 @@ RegisterNetEvent('doc:checkZona', function()
                 --non possiamo ripetere il comando
                 local timeToWait = nextCommand - GetGameTimer()
                 local minutes = ESX.Math.Round((timeToWait / Config.MINUTE))
-                
-                TriggerClientEvent('doc:nextCommand', source, minutes)
-                
+
+                TriggerClientEvent('doc:nextCommand', source, tonumber(minutes))
+
             end
 
             findZone = true

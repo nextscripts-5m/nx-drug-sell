@@ -390,9 +390,9 @@ end
 ---@param minutes number time in minutes
 RegisterNetEvent('doc:nextCommand', function (minutes)
     if(minutes > 1) then
-        ESX.ShowNotification(_Config.Lang['w8_minutes'], minutes)
+        ESX.ShowNotification(_Config.Lang['w8_minutes']:format(minutes))
     elseif minutes == 1 then
-        ESX.ShowNotification(_Config.Lang['w8_minute'], minutes)
+        ESX.ShowNotification(_Config.Lang['w8_minute']:format(minutes))
     else
         ESX.ShowNotification(_Config.Lang['w8_seconds'])
     end
