@@ -1,5 +1,8 @@
 Config = {}
 
+-- Supports "esx" and "qb"
+Config.Framework = "esx"
+
 Config.MINUTE = 60 * 1000
 
 -- Limit of players that can sell together
@@ -54,7 +57,9 @@ Config.Lang = {
     ['reached_limit'] = 'There are too many people who are dealing!',
     ['help_command'] = 'The dealing begins',
     ['not_allowed'] = 'You are not authorized to deal!',
-    ['zone'] = ' - Sell Zone'
+    ['zone'] = ' - Sell Zone',
+    ["not-enough"] = "You don't own enough.",
+    ["is-dead"] = "You can't sell to dead people"
 }
 
 -- Zones

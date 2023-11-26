@@ -3,15 +3,15 @@ game 'gta5'
 lua54 'yes'
 
 shared_scripts {
+	'config.lua',
 	'@es_extended/imports.lua'
 }
 
 client_scripts {
-	'client/client.lua'
+	'client/*.lua'
 }
 
 server_scripts {
-	'config.lua',
 	'@oxmysql/lib/MySQL.lua',
-	'server/server.lua'
+	'server/*.lua'
 }

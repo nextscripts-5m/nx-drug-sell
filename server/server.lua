@@ -1,42 +1,54 @@
+local ox_inventory = exports.ox_inventory
+
+if Config.Framework == "esx" then
+    Framework = "ESX"
+    ESX = exports["es_extended"]:getSharedObject()
+elseif Config.Framework == "qb" then
+    Framework = "QB"
+    QBCore = exports['qb-core']:GetCoreObject()
+else
+    print("Unsopported Framework")
+    return
+end
+
 local nextCommand   = 0
 local findZone      = false
 
-RegisterNetEvent('esx:playerLoaded', function ()
-    ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
-        cb(Config)
-    end)
-end)
+-- RegisterNetEvent('esx:playerLoaded', function ()
+--     ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
+--         cb(Config)
+--     end)
+-- end)
 
-ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
-    cb(Config)
-end)
+-- ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
+--     cb(Config)
+-- end)
 
 
 --- Check if a player can sell drugs
 RegisterNetEvent('doc:checkZona', function()
     local source    = source
-    local xPlayer   = ESX.GetPlayerFromId(source)
-    local plrPos    = xPlayer.getCoords(true)
+    local xPlayer   = GetXPlayer(source)
+    local plrPos    = GetPlayerCoords(xPlayer)
 
 
     for job, phrase in pairs(Config.notAllowedJob) do
     
-        if(xPlayer.getJob().name == job) then
-            
-            xPlayer.showNotification(Config.notAllowedJob[job])
+        if(GetPlayerJob(xPlayer).name == job) then
+            ShowNotification(source, Config.notAllowedJob[job], xPlayer)
             -- we put it true, for avoiding double notification from the client
             TriggerClientEvent('doc:setZone', source, true, false)
             return
         end
     end
-      
+
     for j,zona in pairs(Config.Zone) do
-        
+
         -- controlliamo di essere in almeno un raggio di una zona
         local distance = #(plrPos - zona.posizione)
         if(distance <= zona.raggio) then
 
-            local response = MySQL.query.await("SELECT nextcm FROM users WHERE identifier = ?", {xPlayer.getIdentifier()})
+            local response = MySQL.query.await("SELECT nextcm FROM users WHERE identifier = ?", {GetIdentifier(xPlayer)})
 
             if response then
                 nextCommand = response[1].nextcm or 0
@@ -97,29 +109,26 @@ end
 
 
 RegisterNetEvent('doc:removeItem', function (item, count)
-    
-    local xPlayer = ESX.GetPlayerFromId(source)
-
-    if not xPlayer then
-        return
-    end
-
+    local source    = source
+    local xPlayer   = GetXPlayer(source)
     local dirtyItem = Config.blackMoney
     local dirtyQuantity = Config.BlackMoneyQuantities[item]
 
     if not dirtyQuantity then
-        print(("[%s] Item '%s' not setup in config. Player '%s' may be a modder and triggered this event."):format(GetCurrentResourceName(), item, xPlayer.getIdentifier()))
+        print(("[%s] Item '%s' not setup in config. Player '%s' may be a modder and triggered this event."):format(GetCurrentResourceName(), item, GetIdentifier(xPlayer)))
         return
     end
 
-    local inventoryItem = xPlayer.getInventoryItem(item)
+    local inventoryItem = ox_inventory:GetItem(source, item, nil, false)
     if(not inventoryItem or inventoryItem.count < count) then
-        xPlayer.showNotification("You don't own enough.")
+        ShowNotification(source, Config.Lang["not-enough"], xPlayer)
         return
     end
 
-    xPlayer.removeInventoryItem(item, count)
-    xPlayer.addInventoryItem(dirtyItem, dirtyQuantity * count)
+    if count > 0 then
+        ox_inventory:AddItem(source, dirtyItem, dirtyQuantity * count)
+        ox_inventory:RemoveItem(source, item, count)
+    end
 
 end)
 
@@ -128,6 +137,3 @@ RegisterNetEvent('doc:updatePlayers', function (zona)
     Config.Zone[zona].limitPlayer = math.max(Config.Zone[zona].limitPlayer - 1, 0)
     print('Limit ' .. Config.Zone[zona].limitPlayer)
 end)
-
-
-

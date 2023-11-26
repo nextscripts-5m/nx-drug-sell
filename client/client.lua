@@ -1,6 +1,18 @@
+if Config.Framework == "esx" then
+    Framework = "ESX"
+    ESX = exports["es_extended"]:getSharedObject()
+
+elseif Config.Framework == "qb" then
+    Framework = "QB"
+    QBCore = exports['qb-core']:GetCoreObject()
+
+else
+    print("Unsopported Framework")
+    return
+end
+
 local canSell           = false
 local currentZone       = nil
-local _Config           = nil
 local hasSelled         = false
 local isSpawned         = false
 local canMove           = true
@@ -17,14 +29,14 @@ RegisterNetEvent('doc:setZone',  function(zone, sell)
     if(canSell) then
 
         currentZone = zone
-        ESX.ShowNotification(_Config.Lang['start'])
+        ShowNotification(Config.Lang['start'])
         configuraSpaccio(currentZone)
 
     end
 
     -- we ensure that this printout appears only once and not for every zone
     if zone == nil then
-        ESX.ShowNotification(_Config.Lang['denied'])
+        ShowNotification(Config.Lang['denied'])
     end
 end)
 
@@ -41,7 +53,7 @@ end
 
 local endSession = function ()
     removeAllPeds()
-    ESX.ShowNotification(_Config.Lang['run_away'])
+    ShowNotification(Config.Lang['run_away'])
     TriggerServerEvent('doc:updatePlayers', currentZone)
 end
 
@@ -102,14 +114,14 @@ local checkDrugs = function(zone)
             Wait(1000)
             quantities = 0
 
-            for k, v in ipairs(_Config.Drugs) do
+            for k, v in ipairs(Config.Drugs) do
                 
                 quantities = quantities + exports.ox_inventory:GetItemCount(v)
             end
 
             if (quantities == 0) then
                 
-                ESX.ShowNotification(_Config.Lang['no_drugs'])
+                ShowNotification(Config.Lang['no_drugs'])
                 canSell = false
                 endSession()
                 break
@@ -164,7 +176,7 @@ local canAddOptions = true
 ---@param zone string the zone where the player is selling
 spawnPeds = function(zone)
 
-    for _, ped in ipairs(_Config.Zone[zone].Peds) do
+    for _, ped in ipairs(Config.Zone[zone].Peds) do
 
         for i = 1, #(ped.position), 1 do
 
@@ -209,7 +221,7 @@ spawnPeds = function(zone)
                 SetPedMaxHealth(npcSpawn, 100)
 
                 if canAddOptions then
-                    exports.ox_target:addLocalEntity(npcSpawn, _Config.ox_options)
+                    exports.ox_target:addLocalEntity(npcSpawn, Config.ox_options)
                     --Wait(2000)
                 else
                     removePed(i, true)
@@ -255,7 +267,7 @@ RegisterNetEvent('doc:handleSelling', function (data)
                 removePed(k, true)
             end
         end
-        ESX.ShowNotification('Non puoi vendere ad un morto!')
+        ShowNotification(Config.Lang["is-dead"])
         return
     end
 
@@ -269,7 +281,7 @@ RegisterNetEvent('doc:handleSelling', function (data)
     local drugsQuantity = 0
     local drug
 
-    for k, v in ipairs(_Config.Drugs) do
+    for k, v in ipairs(Config.Drugs) do
 
         local items = exports.ox_inventory:GetItemCount(v)
 
@@ -283,15 +295,16 @@ RegisterNetEvent('doc:handleSelling', function (data)
 
     if(drugsQuantity > 0) then
 
-        -- we can sell the most _Config.MaxQuantity
-        local askedQuantity = math.random(1, math.min(_Config.MaxQuantities[drug], exports.ox_inventory:GetItemCount(drug)))
+        -- we can sell the most Config.MaxQuantity
+        local askedQuantity = math.random(1, math.min(Config.MaxQuantities[drug], exports.ox_inventory:GetItemCount(drug)))
 
-        TriggerServerEvent('doc:removeItem', drug, askedQuantity)
         PedHandshake(data.entity)
+        TriggerServerEvent('doc:removeItem', drug, askedQuantity)
+
         hasSelled = true
 
     else
-        ESX.ShowNotification(_Config.Lang['no_drugs'])
+        ShowNotification(Config.Lang['no_drugs'])
         canSell = false
         hasSelled = false
         endSession()
@@ -339,14 +352,13 @@ function removePed(index, canRemove)
     if canRemove then
         table.remove(Peds, index)
     end
-  
 
     Wait(500)
     -- the npc leaves after the sale
     TaskWanderStandard(pedToRemove, 10.0, 10)
-    
+
     -- after dealing we can't continue to sell to that NPC
-    exports.ox_target:removeLocalEntity(pedToRemove, _Config.ox_options.name)
+    exports.ox_target:removeLocalEntity(pedToRemove, Config.ox_options.name)
 
 end
 
@@ -363,7 +375,6 @@ end
 -- end
 
 
-
 ---Check every second if the player is in the zone
 ---@param zone any the sell zone name
 function checkDistance(zone)
@@ -374,12 +385,12 @@ function checkDistance(zone)
             Wait(2000)
             local playerPed = PlayerPedId()
             local playerCoords = GetEntityCoords(playerPed)
-            local distance = #(playerCoords - _Config.Zone[zone].posizione)
+            local distance = #(playerCoords - Config.Zone[zone].posizione)
             -- let's check if we're out of range
-            if(distance > _Config.Zone[zone].raggio) then
+            if(distance > Config.Zone[zone].raggio) then
                 canSell = false
                 endSession()
-                ESX.ShowNotification(_Config.Lang['terminated'])
+                ShowNotification(Config.Lang['terminated'])
             end
         end
     end)
@@ -390,17 +401,17 @@ end
 ---@param minutes number time in minutes
 RegisterNetEvent('doc:nextCommand', function (minutes)
     if(minutes > 1) then
-        ESX.ShowNotification(_Config.Lang['w8_minutes']:format(minutes))
+        ShowNotification(Config.Lang['w8_minutes']:format(minutes))
     elseif minutes == 1 then
-        ESX.ShowNotification(_Config.Lang['w8_minute']:format(minutes))
+        ShowNotification(Config.Lang['w8_minute']:format(minutes))
     else
-        ESX.ShowNotification(_Config.Lang['w8_seconds'])
+        ShowNotification(Config.Lang['w8_seconds'])
     end
 end)
 
 ---Triggered when we reached the max player limits
 RegisterNetEvent('doc:reachedLimitPlayer', function ()
-    ESX.ShowNotification(_Config.Lang['reached_limit'])
+    ShowNotification(Config.Lang['reached_limit'])
 end)
 
 
@@ -426,23 +437,18 @@ local configureBlips = function(Zones)
             SetBlipAsShortRange(blip, true)
 
             BeginTextCommandSetBlipName("STRING")
-            AddTextComponentString(j .. _Config.Lang['zone'])
+            AddTextComponentString(j .. Config.Lang['zone'])
             EndTextCommandSetBlipName(blip)
 
         end
     end)
 end
 
-
----Get the callback from server
----@param config table config variable
-ESX.TriggerServerCallback('doc_spaccio:getConfig', function(config)
-
-    _Config  = config
-    configureBlips(_Config.Zone)
-
-    RegisterCommand(_Config.commandName, function()
-        TriggerServerEvent('doc:checkZona')
-    end)
-    TriggerEvent('chat:addSuggestion', '/'.. _Config.commandName, _Config.Lang['help_command'], {})
+CreateThread(function ()
+    configureBlips(Config.Zone)
 end)
+
+RegisterCommand(Config.commandName, function()
+    TriggerServerEvent('doc:checkZona')
+end)
+TriggerEvent('chat:addSuggestion', '/'.. Config.commandName, Config.Lang['help_command'], {})
