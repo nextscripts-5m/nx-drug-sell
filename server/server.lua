@@ -29,8 +29,9 @@ local findZone      = false
 RegisterNetEvent('doc:checkZona', function()
     local source    = source
     local xPlayer   = GetXPlayer(source)
-    local plrPos    = GetPlayerCoords(xPlayer)
+    local plrPos    = GetPlayerCoords(xPlayer, source)
 
+    print(plrPos)
 
     for job, phrase in pairs(Config.notAllowedJob) do
     
@@ -48,7 +49,8 @@ RegisterNetEvent('doc:checkZona', function()
         local distance = #(plrPos - zona.posizione)
         if(distance <= zona.raggio) then
 
-            local response = MySQL.query.await("SELECT nextcm FROM users WHERE identifier = ?", {GetIdentifier(xPlayer)})
+            -- local response = MySQL.query.await("SELECT nextcm FROM users WHERE identifier = ?", {GetIdentifier(xPlayer)})
+            local response = ExecuteQuery("SELECT nextcm FROM %s WHERE %s = ?", GetIdentifier(xPlayer))
 
             if response then
                 nextCommand = response[1].nextcm or 0
@@ -101,10 +103,12 @@ function setNextCommandTime(player)
     local minutes = 4 * Config.MINUTE
     nextCommand = GetGameTimer() + minutes
 
-    MySQL.Async.execute('UPDATE users SET nextcm = (?) WHERE identifier = ?', {
-        nextCommand,
-        player.getIdentifier(),
-    })
+    ExecuteQuery("UPDATE %s SET nextcm = ? WHERE %s = ?", nextCommand, GetIdentifier(player))
+
+    -- MySQL.Async.execute('UPDATE users SET nextcm = (?) WHERE identifier = ?', {
+    --     nextCommand,
+    --     player.getIdentifier(),
+    -- })
 end
 
 
