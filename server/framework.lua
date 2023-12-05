@@ -68,3 +68,11 @@ ExecuteQuery = function (query, ...)
         return MySQL.query.await((query):format("players", "license"), {...})
     end
 end
+
+RoundFigures = function (value)
+    if Framework == "ESX" then
+        return ESX.Math.Round(value)
+    elseif Framework == "QB" then
+        return math.floor(value + 0.5)
+    end
+end

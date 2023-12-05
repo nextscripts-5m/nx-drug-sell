@@ -14,16 +14,6 @@ end
 local nextCommand   = 0
 local findZone      = false
 
--- RegisterNetEvent('esx:playerLoaded', function ()
---     ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
---         cb(Config)
---     end)
--- end)
-
--- ESX.RegisterServerCallback('doc_spaccio:getConfig', function(source, cb)
---     cb(Config)
--- end)
-
 
 --- Check if a player can sell drugs
 RegisterNetEvent('doc:checkZona', function()
@@ -77,7 +67,7 @@ RegisterNetEvent('doc:checkZona', function()
             else
                 --non possiamo ripetere il comando
                 local timeToWait = nextCommand - GetGameTimer()
-                local minutes = ESX.Math.Round((timeToWait / Config.MINUTE))
+                local minutes = RoundFigures((timeToWait / Config.MINUTE))
 
                 TriggerClientEvent('doc:nextCommand', source, tonumber(minutes))
 
