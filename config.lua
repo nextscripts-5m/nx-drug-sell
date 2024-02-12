@@ -20,6 +20,36 @@ Config.NotAllowedJob = {
 -- How many seconds between the spawn of each ped
 Config.SecondsBetweenSpawns = 15
 
+--[[
+    NameOfTheZone = {
+        position :
+        radius :
+        limitPlayer : ALWAYS 0
+        minimumCops :
+
+        Drugs = {
+            nameOfTheDrug = {
+                blackMoney : how many black money it gives for each piece of drug
+                maxQuantity : the player will sell from 1 to maxQuantity pieces of drug
+            }
+        }
+
+        Blip = {
+            enable : if true, all players can see the blip on map,
+            name : blip name on map
+            sprite : reference https://docs.fivem.net/docs/game-references/blips/
+            color : reference https://docs.fivem.net/docs/game-references/blips/#blip-colors
+            display : https://docs.fivem.net/natives/?_0x9029B2F3DA924928
+            scale : the scale of the blip on the map
+            shortRange : https://docs.fivem.net/natives/?_0xBE8BE4FE60E27B72
+            circleColor : https://docs.fivem.net/docs/game-references/blips/#blip-colors
+        }
+
+        Peds = {
+            "ped_model" : -- reference https://wiki.rage.mp/index.php?title=Peds
+        }
+    }
+]]
 Config.Zone = {
     Nord = {
         position        = vector3(243.3969, 2823.6755, 43.6674),
@@ -34,7 +64,6 @@ Config.Zone = {
             }
         },
 
-        -- reference https://docs.fivem.net/docs/game-references/blips/
         Blip = {
             enable      = true,
             name        = "Nord Zone",
@@ -46,7 +75,6 @@ Config.Zone = {
             circleColor = 1
         },
 
-        ---reference https://wiki.rage.mp/index.php?title=Peds
         Peds = {
             "u_m_y_paparazzi",
             "csb_ramp_gang",
