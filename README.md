@@ -1,8 +1,6 @@
-# [ESX] NPC Drug Sell
+# [ESX/QB] NPC Drug Sell
 
 A script that allows you to sell drugs to NPC's. It was thought as a business for gangs or as a red zone where gangs can fight with each other.
-
-If you need help you can ask for help. A premise, this is my first script after 3 weeks of experience, so don't blame me :D .
 
 🚀 Easily configurable with config.lua
 
@@ -10,8 +8,7 @@ If you need help you can ask for help. A premise, this is my first script after 
 1. Download the repository
 2. Copy the `nx-drug-sell` folder to your server resources folder
 3. Add `ensure nx-drug-sell` to your server.cfg or put the resource folder into a `[collection]` of resources
-4. Execute `sql.sql` queries
-5. Restart the server
+4. Restart the server
 
 # ⭐ Features
 
@@ -25,10 +22,8 @@ If you need help you can ask for help. A premise, this is my first script after 
   * Change NPCS Model
   * Make more points for NPCS
   * Limit the players who are selling in the zone
-  * Timer between one command and another 
 
-# 💥 Dependency
-- [es_extended](https://github.com/esx-framework/esx-legacy/tree/main/%5Besx%5D/es_extended)
+# 💥 Dependencies
 - [ox_inventory](https://github.com/overextended/ox_inventory)
 - [ox_target](https://github.com/overextended/ox_target)
 - [ox_mysql](https://github.com/overextended/oxmysql)
