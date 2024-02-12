@@ -60,15 +60,6 @@ RegisterCallback = function(name, callback)
     end
 end
 
-
-ExecuteQuery = function (query, ...)
-    if Framework == "ESX" then
-        return MySQL.query.await((query):format("users", "identifier"), {...})
-    elseif Framework == "QB" then
-        return MySQL.query.await((query):format("players", "license"), {...})
-    end
-end
-
 RoundFigures = function (value)
     if Framework == "ESX" then
         return ESX.Math.Round(value)
