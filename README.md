@@ -26,7 +26,6 @@ A script that allows you to sell drugs to NPC's. It was thought as a business fo
 # 💥 Dependencies
 - [ox_inventory](https://github.com/overextended/ox_inventory)
 - [ox_target](https://github.com/overextended/ox_target)
-- [ox_mysql](https://github.com/overextended/oxmysql)
 
 # 🎬 Video
 [Youtube](https://youtu.be/hc5h93AZcXU)
