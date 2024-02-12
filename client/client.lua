@@ -30,10 +30,19 @@ if Config.Framework == "esx" then
     ESX = exports["es_extended"]:getSharedObject()
     RegisterNetEvent("esx:playerLoaded", PlayerLoaded)
 
+    RegisterNetEvent("esx:setJob", function (newJob, lastJob)
+        ESX.PlayerData.job = newJob
+    end)
+
 elseif Config.Framework == "qb" then
     Framework = "QB"
     QBCore = exports['qb-core']:GetCoreObject()
     RegisterNetEvent("QBCore:Client:OnPlayerLoaded", PlayerLoaded)
+
+    RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
+        PlayerData = val
+        -- print(QBCore.Debug(PlayerData))
+    end)
 else
     print("Unsopported Framework")
     return
