@@ -10,6 +10,7 @@ AddEventHandler('onClientResourceStart', function (resource)
         elseif Framework == "QB" then
             if not LocalPlayer.state['isLoggedIn'] then return end
         end
+        loaded = true
         LoadZones()
         LoadBlips()
     end
@@ -70,6 +71,7 @@ LoadZones = function ()
             })
 
             function point:onEnter()
+                currentZone = self.zoneName
                 IncreasePlayers(self.zoneName)
 
                 if Config.PlayerLimit > 0 and GetNumberOfPlayers(self.zoneName) > Config.PlayerLimit then
@@ -119,7 +121,7 @@ SpawnPeds = function (zoneName)
             end
 
             if #Peds > 10 then
-                Wait(1500)
+                Wait(1100)
                 goto continue
             end
 
@@ -152,9 +154,7 @@ SpawnPeds = function (zoneName)
 
             AddTargetToEntity(npcEntity, zoneName)
             TaskWanderInArea(npcEntity, coords.x, coords.y, coords.z, zoneRadius + 0.0, 2.0, 4.0)
-            -- TaskWanderStandard(npcEntity, 10.0, 10.0)
             SetBlockingOfNonTemporaryEvents(npcEntity, true)
-
 
             Wait(Config.SecondsBetweenSpawns * 1000)
             ::continue::
@@ -259,6 +259,11 @@ end)
 
 CreateThread(function ()
     while true do
+
+        if not InZone then
+            break
+        end
+
         for k, v in pairs(Peds) do
             if v.zoneName == currentZone then
                 local coords    = GetEntityCoords(v.ped)
@@ -269,7 +274,7 @@ CreateThread(function ()
                 end
             end
         end
-        -- print("ped:", #Peds)
+        -- print("ped:", #Peds, json.encode(Peds))
         Wait(3000)
     end
 end)

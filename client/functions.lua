@@ -72,7 +72,8 @@ RemovePed = function (entity)
 end
 
 RemovePeds = function (zoneName)
-    for k, ped in pairs(Peds) do
+    for k = #Peds, 1, -1 do
+        local ped = Peds[k]
         if ped.zoneName == zoneName then
             exports.ox_target:removeLocalEntity(ped.ped, ("drugSell-%s"):format(ped.ped))
             RemoveBlip(ped.blip)

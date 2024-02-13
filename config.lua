@@ -55,7 +55,7 @@ Config.Zone = {
         position        = vector3(243.3969, 2823.6755, 43.6674),
         radius          = 100.0,
         limitPlayer     = 0,
-        minimumCops     = 2,
+        minimumCops     = 0,
 
         Drugs   = {
             ['marijuana'] = {
