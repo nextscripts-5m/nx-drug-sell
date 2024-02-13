@@ -66,24 +66,23 @@ RemovePed = function (entity)
         if ped.ped == entity then
             RemoveBlip(ped.blip)
             exports.ox_target:removeLocalEntity(ped.ped, ("drugSell-%s"):format(ped.ped))
-            RemoveFromTable(k)
+            RemoveFromTable(Peds, k)
         end
     end
 end
 
 RemovePeds = function (zoneName)
-    for k = #Peds, 1, -1 do
-        local ped = Peds[k]
+    for k, ped in pairs(Peds) do
         if ped.zoneName == zoneName then
             exports.ox_target:removeLocalEntity(ped.ped, ("drugSell-%s"):format(ped.ped))
             RemoveBlip(ped.blip)
-            RemoveFromTable(k)
+            RemoveFromTable(Peds, k)
         end
     end
 end
 
-RemoveFromTable = function (k)
-    table.remove(Peds, k)
+RemoveFromTable = function (t, k)
+    t[k] = nil
 end
 
 GetRandomCoords = function (center, radius)
