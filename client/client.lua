@@ -180,8 +180,10 @@ end
 
 PickRandomNpc = function ()
     local npc = Peds[math.random(#Peds)]
-    TaskGoToEntity(npc.ped, PlayerPedId(), -1, 1.6, 1.28, 0, 0)
-    SetPedKeepTask(npc.ped, true)
+    if npc then
+        TaskGoToEntity(npc.ped, PlayerPedId(), -1, 1.6, 1.28, 0, 0)
+        SetPedKeepTask(npc.ped, true)
+    end
 end
 
 CheckDrugs = function (zoneName)
