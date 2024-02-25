@@ -89,7 +89,7 @@ GetRandomCoords = function (center, radius)
     local reducedRadius = radius - (radius * 0.25)
     reducedRadius       = math.min(radius, reducedRadius)
 
-    local radius        = math.random(math.floor(reducedRadius * 0.35), reducedRadius)
+    local radius        = math.random(math.floor(reducedRadius * 0.35), math.floor(reducedRadius))
     local coords        = center
 
     local x     = coords.x + math.random(-radius, radius)

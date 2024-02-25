@@ -27,9 +27,8 @@ lib.callback.register("drugSell:getNumberOfPlayers", function (source, zone)
     return Config.Zone[zone].limitPlayer
 end)
 
-lib.callback.register("drugSell:getNumberOfCops", function (source, zone)
-    local xPlayers = ESX.GetExtendedPlayers('job', 'police')
-    return #xPlayers
+lib.callback.register("drugSell:getNumberOfCops", function (source)
+    return GetCops()
 end)
 
 
