@@ -53,8 +53,6 @@ end
 LoadZones = function ()
     CreateThread(function ()
 
-        if not CheckJob(GetJobFramework()) then return end
-
         for zoneName, zone in pairs(Config.Zone) do
 
             local coords    = zone.position
@@ -71,6 +69,7 @@ LoadZones = function ()
             })
 
             function point:onEnter()
+                
                 currentZone = self.zoneName
                 IncreasePlayers(self.zoneName)
 
@@ -115,6 +114,8 @@ SpawnPeds = function (zoneName)
         local zoneRadius    = zone.radius
 
         while true do
+
+            if not CheckJob(GetJobFramework()) then break end
 
             if not InZone then
                 break
@@ -165,6 +166,9 @@ SpawnPeds = function (zoneName)
     CreateThread(function ()
         while true do
 
+
+            if not CheckJob(GetJobFramework()) then return end
+            
             if not InZone then
                 break
             end
